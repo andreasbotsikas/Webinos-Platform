@@ -35,6 +35,7 @@ function help() {
   console.log("--pzp-host=[name]        host of the pzp (default localhost)");
   console.log("--auth-code=[code]       context debug flag (default DEBUG)");
   console.log("--preference=[option]    preference option (default hub, other option peer)");
+  console.log("--use-legacy-ws=true     use legacy ws implementation to support safari");
   process.exit();
 }
 
@@ -62,6 +63,9 @@ process.argv.forEach(function (arg) {
       case "--auth-code":
         options.code = parts[1]+"="; // added as last letter in qrcode is = but above "split" removes this info
         break;
+	  case "--use-legacy-ws":
+	    options.useLegacyWebsockets = (parts[1]=='true');
+		break;
       default:
         console.log("unknown option: " + parts[0]);
         break;
@@ -138,6 +142,10 @@ fs.readFile(path.join(__dirname, "config-pzp.json"), function(err, data) {
     if (options.preference) {
       config.preference = options.preference;
     }
+	if (options.useLegacyWebsockets){
+	  config.useLegacyWebsockets = true;
+	}
+
     fileParams.pzpHost = config.pzpHost;
     initializePzp(config, pzpModules);
 });

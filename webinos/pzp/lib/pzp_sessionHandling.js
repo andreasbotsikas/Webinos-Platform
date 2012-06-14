@@ -135,20 +135,21 @@ Pzp.prototype.sendMessage = function (message, address) {
   log.info('mode '+ self.mode + ' state '+self.state);
 
   try {
+    // pause and resume are not supported in the version Hixie-76 websocket implementation
     if (self.connectedWebApp[address]) { // it should be for the one of the apps connected.
-      self.connectedWebApp[address].socket.pause();
+      if (typeof self.connectedWebApp[address].socket.pause === 'function') self.connectedWebApp[address].socket.pause();
       self.connectedWebApp[address].sendUTF(jsonString);
-      self.connectedWebApp[address].socket.resume();
+      if (typeof self.connectedWebApp[address].socket.resume === 'function') self.connectedWebApp[address].socket.resume();
     } else if (self.connectedPzp[address] && self.connectedPzp[address].state === global.states[2] &&
       (self.mode === global.modes[2] || self.mode === global.modes[3])) {
-      self.connectedPzp[address].socket.pause();
+      if (typeof self.connectedWebApp[address].socket.pause === 'function') self.connectedPzp[address].socket.pause();
       self.connectedPzp[address].socket.write(buf);
-      self.connectedPzp[address].socket.resume();
+      if (typeof self.connectedWebApp[address].socket.resume === 'function') self.connectedPzp[address].socket.resume();
     } else if(self.connectedPzh[address] && self.state === global.states[2] &&
       (self.mode === global.modes[1] || self.mode === global.modes[3])){
-      self.connectedPzh[address].pause();
+      if (typeof self.connectedWebApp[address].socket.pause === 'function') self.connectedPzh[address].pause();
       self.connectedPzh[address].write(buf);
-      self.connectedPzh[address].resume();
+      if (typeof self.connectedWebApp[address].socket.resume === 'function') self.connectedPzh[address].resume();
     }
   } catch (err) {
     log.error("sending send message"+ err);  
@@ -546,8 +547,9 @@ Pzp.prototype.initializePzp = function(config, modules, callback) {
           callback("undefined");
         } 
       } 
-      
-      
+      // Enable legacy ws if requested by argument
+	  if (config.useLegacyWebsockets) global.useLegacyWebsockets = config.useLegacyWebsockets;
+
       self.config = configure;
 
       if (self.mode === global.modes[0]) { //Virgin

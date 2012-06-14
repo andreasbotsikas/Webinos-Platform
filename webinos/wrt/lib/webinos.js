@@ -20,6 +20,15 @@
     var channel = null;
 
     /**
+     * Makes an http get request
+     */
+    function httpGet(theUrl){
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open( "GET", theUrl, false );
+      xmlHttp.send( null );
+      return xmlHttp.responseText;
+    }
+    /**
      * Creates the socket communication channel
      * for a locally hosted websocket server at port 8080
      * for now this channel is used for sending RPC, later the webinos
@@ -29,20 +38,24 @@
         try {
             channel = new WebinosSocket();
         } catch(e1) {
-	        try {
-	            var port = parseInt(location.port) + 1;
-	            if (isNaN(port)) {
-	                port = 81;
-	            }
-	            var host = window.location.hostname;
-	            if(!host) {
-	            	host = 'localhost';
-	            	port = 8081;
-	            }
-	            channel = new WebSocket("ws://" + host + ":" + port);
-	        } catch(e2) {
-	            channel  = new MozWebSocket('ws://'+window.location.hostname+':'+port);
-	        }
+            try {
+                var host = window.location.hostname;
+                if(!host) {
+                    host = 'localhost';
+                }
+                var port = null;
+                try{
+                    // Try to get the ws port from the server
+                    port = JSON.parse(httpGet("http://" + window.location.host + "/wsport")).port;
+                }catch(e3){
+                    // if it fails, try to guess
+                    port = parseInt(location.port) + 1;
+                    if (isNaN(port)) port = 81;
+                }
+                channel = new WebSocket("ws://" + host + ":" + port);
+            } catch(e2) {
+                channel  = new MozWebSocket('ws://'+window.location.hostname+':'+port);
+            }
         }
         webinos.session.setChannel(channel);
 

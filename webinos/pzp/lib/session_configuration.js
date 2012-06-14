@@ -37,6 +37,10 @@ session_configuration.webServerPort  = 9000;
 session_configuration.pzpHttpServerPort = 8081;
 session_configuration.pzpWebServerPort  = 8080;
 
+// Legacy websocket support. If true, will use the legacy implementation 
+// to support the Hixie-76 websocket protocol (for safari mainly)
+session_configuration.useLegacyWebsockets = false;
+
 // PZP TLS Server to allow PZP"s to connect
 session_configuration.pzpServerPort = 8040;
 
