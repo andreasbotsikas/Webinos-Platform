@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 * 
-* Copyright 2012 André Paul, Fraunhofer FOKUS
+* Copyright 2012 AndrÎ¹ Paul, Fraunhofer FOKUS
 ******************************************************************************/
 (function() {
 
@@ -23,6 +23,9 @@
 	var registeredDispatchListeners = {};
 	
 	var eventService = null;
+
+	// Keep track of the registered callback RPC objects
+	var registeredCallbackRPCs = {};
 	
 	/**
 	 * Webinos Event service constructor (client side).
@@ -128,7 +131,8 @@
 		};
 		
 		webinos.rpcHandler.registerCallbackObject(rpc);
-		
+        // Keep track of the RPC object to remove it on unregister
+        registeredCallbackRPCs[listenerID] = rpc;
 		
 		
 		webinos.rpcHandler.executeRPC(rpc,
@@ -158,6 +162,12 @@
 		var rpc = webinos.rpcHandler.createRPC(this, "removeWebinosEventListener",  registeredListeners[listenerId]);
 		webinos.rpcHandler.executeRPC(rpc,
 				function (params){
+                    // Remove the rpc callback object
+                    webinos.rpcHandler.unregisterCallbackObject(registeredCallbackRPCs[listenerId]);
+                    // And free the object
+                    registeredCallbackRPCs[listenerId] = null;
+                   //Remove the object from the registeredListeners array
+                    registeredListeners[listenerId] = null;
 					successCB(params);
 				},
 				function (error){}
