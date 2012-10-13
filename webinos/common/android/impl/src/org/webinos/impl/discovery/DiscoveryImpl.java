@@ -272,7 +272,7 @@ public class DiscoveryImpl extends DiscoveryManager implements IModule {
 					Log.d(TAG, "discovery Okay" +getResultCode());
 			       	//get the list of bonded devices
 		        	   Set<BluetoothDevice> devicesPaired = mBluetoothAdapter.getBondedDevices();
-		        	   if (devicesPaired.length() == 0 && devicesAvailable.length() == 0)
+		        	   if (devicesPaired.size() == 0 && devicesAvailable.length() == 0)
 		        		   Log.e(TAG, "No bluetooth device is available");
 		        	   else{
 		            	   if (devicesAvailable.length() != 0) {
@@ -293,7 +293,7 @@ public class DiscoveryImpl extends DiscoveryManager implements IModule {
 		    	        		   }
 		    	        	   	}
 		    	           }
-		            	   if(devicesPaired.length() != 0) {
+		            	   if(devicesPaired.size() != 0) {
 		    	        	   for (BluetoothDevice device : devicesPaired) {
 		    	        		   BluetoothClass bluetoothClass = device.getBluetoothClass();
 		    	        		   if ((bluetoothClass != null) && (bluetoothClass.hasService(Integer.parseInt(serviceType.api))))

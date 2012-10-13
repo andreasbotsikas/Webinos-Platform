@@ -227,12 +227,12 @@ public class DiscoveryHRMImpl extends DiscoveryManager implements IModule {
 			Log.d(TAG, "Connecting to HRM");
 			//get the list of bonded devices
 			Set<BluetoothDevice> devicesPaired = mBluetoothAdapter.getBondedDevices();
-			if (devicesPaired.length() == 0 && devicesAvailable.length() == 0)
+			if (devicesPaired.size() == 0 && devicesAvailable.size() == 0)
 			Log.e(TAG, "No bluetooth device is available");
 			//TODO: check if HRM is paired
 			else{
 				//Assume that HXM device is paired
-				if(devicesPaired.length() != 0){
+				if(devicesPaired.size() != 0){
 					for (BluetoothDevice device : devicesPaired) {
 						String deviceName = device.getName();
 						if ( deviceName.startsWith("HXM") ) {
