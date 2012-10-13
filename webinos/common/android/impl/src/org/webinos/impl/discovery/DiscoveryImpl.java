@@ -163,7 +163,7 @@ public class DiscoveryImpl extends DiscoveryManager implements IModule {
 		      }
 		    });
 		    
-		    while (adapters.isEmpty()) {
+		    while (adapters.length() == 0) {
 		    	  Log.d(TAG, "wait for adapter");
 			        
 		      synchronized (mutex) {
@@ -272,10 +272,10 @@ public class DiscoveryImpl extends DiscoveryManager implements IModule {
 					Log.d(TAG, "discovery Okay" +getResultCode());
 			       	//get the list of bonded devices
 		        	   Set<BluetoothDevice> devicesPaired = mBluetoothAdapter.getBondedDevices();
-		        	   if (devicesPaired.isEmpty() && devicesAvailable.isEmpty())
+		        	   if (devicesPaired.length() == 0 && devicesAvailable.length() == 0)
 		        		   Log.e(TAG, "No bluetooth device is available");
 		        	   else{
-		            	   if (!devicesAvailable.isEmpty()) {
+		            	   if (!devicesAvailable.length() == 0) {
 		    	        	   for (BluetoothDevice device : devicesAvailable) {
 		    	        		   BluetoothClass bluetoothClass = device.getBluetoothClass();
 		    	        		   if ((bluetoothClass != null) && (bluetoothClass.hasService(Integer.parseInt(serviceType.api))))
@@ -293,7 +293,7 @@ public class DiscoveryImpl extends DiscoveryManager implements IModule {
 		    	        		   }
 		    	        	   	}
 		    	           }
-		            	   if(!devicesPaired.isEmpty()) {
+		            	   if(!devicesPaired.length() == 0) {
 		    	        	   for (BluetoothDevice device : devicesPaired) {
 		    	        		   BluetoothClass bluetoothClass = device.getBluetoothClass();
 		    	        		   if ((bluetoothClass != null) && (bluetoothClass.hasService(Integer.parseInt(serviceType.api))))

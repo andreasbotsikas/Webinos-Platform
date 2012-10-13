@@ -47,7 +47,7 @@ public class WebChromeClient extends android.webkit.WebChromeClient{
 	
 	@Override
 	public void onReceivedTitle(WebView webView, String title) {
-		if(title != null && !title.isEmpty())
+		if(title != null && !title.length() == 0)
 			activity.setTitle(title);
 	}
 

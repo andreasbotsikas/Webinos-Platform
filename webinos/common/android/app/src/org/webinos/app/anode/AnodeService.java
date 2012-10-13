@@ -117,7 +117,7 @@ public class AnodeService extends IntentService {
 		String args = intent.getStringExtra(AnodeReceiver.CMD);
 		
 		/* if no cmdline was sent, then launch the activity for interactive behaviour */
-		if(args == null || args.isEmpty()) {
+		if(args == null || args.length() == 0) {
 			intent.setClassName(getApplication(), AnodeActivity.class.getName());
 			getApplication().startActivity(intent);
 			return;

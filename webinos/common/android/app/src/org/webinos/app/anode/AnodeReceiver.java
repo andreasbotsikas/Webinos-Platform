@@ -86,7 +86,7 @@ public class AnodeReceiver extends BroadcastReceiver {
 			String args = intent.getStringExtra(CMD);
 		
 			/* if no cmdline was sent, then launch the activity for interactive behaviour */
-			if(args == null || args.isEmpty()) {
+			if(args == null || args.length() == 0) {
 				intent.setClassName(ctx, AnodeActivity.class.getName());
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				ctx.startActivity(intent);

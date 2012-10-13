@@ -57,7 +57,7 @@ public class RendererActivity extends Activity implements WrtManager.LaunchListe
 
 	private void initRenderer() {
 		String id = getIntent().getStringExtra(WrtReceiver.ID);
-		if(id == null || id.isEmpty())
+		if(id == null || id.length() == 0)
 			throw new IllegalArgumentException("WrtActivity.onCreate(): missing installId");
 
 		installId = id;
@@ -67,7 +67,7 @@ public class RendererActivity extends Activity implements WrtManager.LaunchListe
 			throw new RuntimeException("WrtActivity.onCreate(): unable to get widget config");
 
 		String inst = getIntent().getStringExtra(WrtReceiver.INST);
-		if(inst == null || inst.isEmpty()) {
+		if(inst == null || inst.length() == 0) {
 			synchronized(RendererActivity.class) {
 				inst = String.valueOf(nextId++);
 			}

@@ -62,12 +62,12 @@ public class WidgetListAdapter extends ArrayAdapter<String> {
 		}
 		if(widgetConfig.name != null)
 			labelText = widgetConfig.name.visual;
-		if(labelText == null || labelText.isEmpty()) {
+		if(labelText == null || labelText.length() == 0) {
 			if(widgetConfig.shortName != null)
 				labelText = widgetConfig.shortName.visual;
-			if(labelText == null || labelText.isEmpty()) {
+			if(labelText == null || labelText.length() == 0) {
 				labelText = widgetConfig.id;
-				if(labelText == null || labelText.isEmpty()) {
+				if(labelText == null || labelText.length() == 0) {
 					labelText = "Untitled";	
 				}
 			}
@@ -83,7 +83,7 @@ public class WidgetListAdapter extends ArrayAdapter<String> {
 		if(widgetConfig.author != null) {
 			if(widgetConfig.author.name != null)
 				authorText = widgetConfig.author.name.visual;
-			if(authorText == null || authorText.isEmpty()) {
+			if(authorText == null || authorText.length() == 0) {
 				authorText = widgetConfig.author.href;
 				if(authorText == null) authorText = "";
 			}
@@ -94,19 +94,19 @@ public class WidgetListAdapter extends ArrayAdapter<String> {
 		if(versionText == null) versionText = "";
 
 		String detailText = authorText;
-		if(!versionText.isEmpty()) {
-			if(!detailText.isEmpty()) detailText += " ";
+		if(!versionText.length() == 0) {
+			if(!detailText.length() == 0) detailText += " ";
 			detailText += versionText;
 		}
-		if(!descriptionText.isEmpty()) {
-			if(!detailText.isEmpty()) detailText += " ";
+		if(!descriptionText.length() == 0) {
+			if(!detailText.length() == 0) detailText += " ";
 			detailText += descriptionText;
 		}
 		detailView.setText(detailText);
 
 		/* decide what to show as the icon */
 		String prefIcon = widgetConfig.prefIcon;
-		if(prefIcon == null || prefIcon.isEmpty()) {
+		if(prefIcon == null || prefIcon.length() == 0) {
 			imageView.setImageResource(R.drawable.webinos_icon);
 		} else {
 			String iconPath = WidgetManagerService.getInstance().getWidgetDir(installId) + '/' + prefIcon;

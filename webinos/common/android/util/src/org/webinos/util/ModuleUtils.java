@@ -82,7 +82,7 @@ public class ModuleUtils {
 		boolean remove_tmp_resource = false;
 		
 		/* if no path was specified, it is an error */
-		if(path == null || path.isEmpty()) {
+		if(path == null || path.length() == 0) {
 			Log.v(TAG, "install: no path specified");
 			return;
 		}
@@ -95,7 +95,7 @@ public class ModuleUtils {
 		}
 		
 		/* guess the module name, if not already specified */
-		if(module == null || module.isEmpty()) {
+		if(module == null || module.length() == 0) {
 			module = guessModuleName(path, modType);
 		}
 
@@ -160,7 +160,7 @@ public class ModuleUtils {
 	public static void uninstall(String module) {
 		
 		/* if no module was specified, it is an error */
-		if(module == null || module.isEmpty()) {
+		if(module == null || module.length() == 0) {
 			Log.v(TAG, "uninstall: no module specified");
 			return;
 		}
@@ -185,7 +185,7 @@ public class ModuleUtils {
 	public static ModuleType guessModuleType(String filename) {
 		/* guess by extension first */
 		for(ModuleType modType : modTypes) {
-			if(!modType.extension.isEmpty() && filename.endsWith(modType.extension))
+			if(!modType.extension.length() == 0 && filename.endsWith(modType.extension))
 				return modType;
 		}
 		/* if it's a local directory, then it's type DIR */

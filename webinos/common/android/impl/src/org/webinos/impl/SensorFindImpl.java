@@ -96,7 +96,7 @@ public class SensorFindImpl extends FindSensorsManager implements IModule {
 		  * Get sensor list for requested sensor type 
 		  */
 		  androidSensorList = androidSensorManager.getSensorList(sensorType);
-		  if(androidSensorList.isEmpty())
+		  if(androidSensorList.length() == 0)
 		  	Log.e(TAG, "No sensor found");
 
       for (Sensor androidSensor : androidSensorList) {

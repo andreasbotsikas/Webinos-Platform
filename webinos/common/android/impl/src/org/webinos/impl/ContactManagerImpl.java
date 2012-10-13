@@ -79,7 +79,7 @@ public class ContactManagerImpl extends ContactManager implements IModule {
 	public PendingOperation find(HashMap<String, String> fields, ContactFindCB successCB, ContactErrorCB errorCB, ContactFindOptions options) {
 		// TODO Auto-generated method stub
 
-        if(!fields.isEmpty()) { 
+        if(!fields.length() == 0) {
         	
         	ArrayList<String[]> parameters = inspectFields(fields);
         	Contact[] contacts = this.getFilteredContacts(parameters.get(0)[0],  parameters.get(1));

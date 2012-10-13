@@ -148,7 +148,7 @@ public class SensorImpl extends org.webinos.api.sensor.SensorManager implements 
 		 * Get sensor list for all sensors in device
 		 */
 		androidSensorList = androidSensorManager.getSensorList(Sensor.TYPE_ALL);
-		if(androidSensorList.isEmpty())
+		if(androidSensorList.length() == 0)
 			Log.e(TAG, "No sensor found");
 					
 		return this;
