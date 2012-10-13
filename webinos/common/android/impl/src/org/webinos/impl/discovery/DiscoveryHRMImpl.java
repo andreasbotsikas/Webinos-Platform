@@ -174,7 +174,7 @@ public class DiscoveryHRMImpl extends DiscoveryManager implements IModule {
 			}
 		});
 		    
-		while (adapters.length() == 0) {
+		while (adapters.size() == 0) {
 			Log.d(TAG, "wait for adapter");
 				
 			synchronized (mutex) {

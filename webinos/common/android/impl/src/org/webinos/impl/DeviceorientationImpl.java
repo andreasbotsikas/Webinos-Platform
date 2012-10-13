@@ -104,26 +104,26 @@ public class DeviceorientationImpl extends DeviceorientationManager implements
 		
 		/* get orientation sensor - legacy devices */
 		List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
-		if(sensorList.length() == 0)
+		if(sensorList.size() == 0)
 			Log.e(TAG, "No orientation device found");
 		else
 			orientationSensor = sensorList.get(0);
 
 		/* get magnetic field sensor */
 		sensorList = sensorManager.getSensorList(Sensor.TYPE_MAGNETIC_FIELD);
-		if(sensorList.length() == 0)
+		if(sensorList.size() == 0)
 			Log.e(TAG, "No magnetic field device found");
 		else
 			magneticSensor = sensorList.get(0);
 
 		/* get motion sensors */
 		sensorList = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
-		if(sensorList.length() == 0) {
+		if(sensorList.size() == 0) {
 			Log.e(TAG, "No accelerometer device found");
 		} else {
 			accelerometerSensor = sensorList.get(0);
 			sensorList = sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION);
-			if(sensorList.length() == 0) {
+			if(sensorList.size() == 0) {
 				Log.e(TAG, "No linear accelerometer device found");
 				integrateLinearAcceleration = true;
 			} else {
