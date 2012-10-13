@@ -232,7 +232,7 @@ public class DiscoveryHRMImpl extends DiscoveryManager implements IModule {
 			//TODO: check if HRM is paired
 			else{
 				//Assume that HXM device is paired
-				if(!devicesPaired.length() == 0){
+				if(devicesPaired.length() != 0){
 					for (BluetoothDevice device : devicesPaired) {
 						String deviceName = device.getName();
 						if ( deviceName.startsWith("HXM") ) {

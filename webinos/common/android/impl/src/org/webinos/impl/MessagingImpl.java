@@ -199,7 +199,7 @@ public class MessagingImpl extends MessagingManager implements IModule {
 	public void stopModule() {
 		//TODO stop all findMessages and sendMessages
 		Log.v(LABEL, "stopModule");
-		if(!smsReceiverList.length() == 0) {
+		if(smsReceiverList.length() != 0) {
 			Set<Integer> listenersId = smsReceiverList.keySet();
 			for(Integer i: listenersId) {
 				androidContext.unregisterReceiver(smsReceiverList.get(i));

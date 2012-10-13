@@ -94,12 +94,12 @@ public class WidgetListAdapter extends ArrayAdapter<String> {
 		if(versionText == null) versionText = "";
 
 		String detailText = authorText;
-		if(!versionText.length() == 0) {
-			if(!detailText.length() == 0) detailText += " ";
+		if(versionText.length() != 0) {
+			if(detailText.length() != 0) detailText += " ";
 			detailText += versionText;
 		}
-		if(!descriptionText.length() == 0) {
-			if(!detailText.length() == 0) detailText += " ";
+		if(descriptionText.length() != 0) {
+			if(detailText.length() != 0) detailText += " ";
 			detailText += descriptionText;
 		}
 		detailView.setText(detailText);

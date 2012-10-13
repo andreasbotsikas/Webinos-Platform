@@ -185,7 +185,7 @@ public class ModuleUtils {
 	public static ModuleType guessModuleType(String filename) {
 		/* guess by extension first */
 		for(ModuleType modType : modTypes) {
-			if(!modType.extension.length() == 0 && filename.endsWith(modType.extension))
+			if(modType.extension.length() != 0 && filename.endsWith(modType.extension))
 				return modType;
 		}
 		/* if it's a local directory, then it's type DIR */

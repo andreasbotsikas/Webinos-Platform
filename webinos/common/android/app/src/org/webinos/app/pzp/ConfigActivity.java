@@ -122,7 +122,7 @@ public class ConfigActivity extends Activity implements StateListener {
 			String cmd = config.getProperty("pzp.cmd");
 			for(String key : args.keySet()) {
 				String argValue = args.get(key);
-				if(argValue != null && !argValue.length() == 0)
+				if(argValue != null && argValue.length() != 0)
 					cmd += " " + config.getProperty("pzp.cmd." + key).replace("%" + key, argValue);
 			}
 
