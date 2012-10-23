@@ -324,17 +324,103 @@ var PzpWSS = function() {
             if (wrtServer){
               startAndroidWRT();
             }
-            wsServer = new WebSocketServer({
-              httpServer: value,
-              autoAcceptConnections: true
-            });
+//            wsServer = new WebSocketServer({
+//              httpServer: value,
+//              autoAcceptConnections: true
+//            });
+//
+//            wsServer.on("connect", function(connection) {
+//              logger.log("connection accepted.");
+//              connectedApp(connection);
+//              connection.on("message", function(message) { wsMessage(connection, message.utf8Data); });
+//              connection.on("close", function(reason, description) { wsClose(connection, description) });
+//            });
 
-            wsServer.on("connect", function(connection) {
-              logger.log("connection accepted.");
-              connectedApp(connection);
-              connection.on("message", function(message) { wsMessage(connection, message.utf8Data); });
-              connection.on("close", function(reason, description) { wsClose(connection, description) });
-            });
+              // A common connection handler
+              var handleConnection = function(connection) {
+                  log.info("connection accepted.");
+                  pzp.connectedApp(connection);
+                  connection.addListener('message', function(IncwsMessage) {
+                      var message = IncwsMessage;
+                      // WebSocket-Node adds a "type", node-websocket-server does not
+                      if (typeof IncwsMessage.type !== 'undefined') {
+                          if (IncwsMessage.type !== 'utf8')     return;
+                          message = IncwsMessage.utf8Data;
+                      }
+                      wsMessage(connection, message);
+                  });
+                  connection.addListener('close', function() {
+                      console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");
+                      wsClose(connection);
+                  });
+              };
+
+
+              log.info("Using legacy ws protocol");
+              // Hixie-76 websocket protocol (for safari mainly)
+              var WebSocketRequest = require('websocket').request,
+                  ws = require('websocket-server');
+              WebSocketRequest.prototype.connections = [];
+              WebSocketRequest.prototype.handleRequestAccepted = WebSocketServer.prototype.handleRequestAccepted;
+              WebSocketRequest.prototype.handleConnectionClose = WebSocketServer.prototype.handleConnectionClose;
+              WebSocketRequest.prototype.broadcastUTF = WebSocketServer.prototype.broadcastUTF;
+              var miksagoConnection = require(path.join(__dirname, '../../../node_modules/websocket-server/lib/ws/connection'));
+              var miksagoServer = ws.createServer();
+              miksagoServer.server = httpserver;
+
+              miksagoServer.addListener('connection', function(connection) {
+                  // Add remoteAddress property
+                  connection.remoteAddress = connection._socket.remoteAddress;
+                  // We want to use "sendUTF" regardless of the server implementation
+                  connection.sendUTF = connection.send;
+                  handleConnection(connection);
+              });
+
+
+              // WebSocket-Node config
+              var wsServerConfig =  {
+                  // All options *except* 'httpServer' are required when bypassing
+                  // WebSocketServer.
+                  maxReceivedFrameSize: 0x10000,
+                  maxReceivedMessageSize: 0x100000,
+                  fragmentOutgoingMessages: true,
+                  fragmentationThreshold: 0x4000,
+                  keepalive: true,
+                  keepaliveInterval: 20000,
+                  assembleFragments: true,
+                  // autoAcceptConnections is not applicable when bypassing WebSocketServer
+                  // autoAcceptConnections: false,
+                  disableNagleAlgorithm: true,
+                  closeTimeout: 5000
+              };
+
+              // Handle the upgrade event ourselves instead of using WebSocketServer
+              var wsRequest={};
+              httpserver.on('upgrade', function(req, socket, head) {
+                  if (typeof req.headers['sec-websocket-version'] !== 'undefined') {
+                      // WebSocket hybi-08/-09/-10 connection (WebSocket-Node)
+                      wsRequest = new WebSocketRequest(socket, req, wsServerConfig);
+                      try {
+                          wsRequest.readHandshake();
+                          var wsConnection = wsRequest.accept(wsRequest.requestedProtocols[0], wsRequest.origin);
+                          wsRequest.handleRequestAccepted(wsConnection);
+                          handleConnection(wsConnection);
+                      }catch(e) {
+                          log.error("WebSocket Request unsupported by WebSocket-Node: " + e.toString());
+                          return;
+                      }
+                  } else {
+                      // WebSocket hixie-75/-76/hybi-00 connection (node-websocket-server)
+                      if (req.method === 'GET' &&
+                          (req.headers.upgrade && req.headers.connection) &&
+                          req.headers.upgrade.toLowerCase() === 'websocket' &&
+                          req.headers.connection.toLowerCase() === 'upgrade') {
+                          new miksagoConnection(miksagoServer.manager, miksagoServer.options, req, socket, head);
+                      }
+                  }
+              });
+
+
 
             return callback(true);
           } else {

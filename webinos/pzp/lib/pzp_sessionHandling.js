@@ -235,14 +235,15 @@ var Pzp = function () {
     logger.log('send to '+ address + ' message ' + jsonString +' and mode '+ mode);
 
     try {
+      // pause and resume are not supported in the version Hixie-76 websocket implementation
       if (connectedPzp.hasOwnProperty(address) && connectedPzp[address].state === states[2]) {
-        connectedPzp[address].socket.pause();
+        if (typeof connectedPzp[address].socket.pause === "function") connectedPzp[address].socket.pause();
         connectedPzp[address].socket.write(buf);
-        connectedPzp[address].socket.resume();
+        if (typeof connectedPzp[address].socket.resume === "function")  connectedPzp[address].socket.resume();
       } else if(connectedPzh.hasOwnProperty(address) && connectedPzh[address].state === states[2] && mode === modes[1]){
-        connectedPzh[address].socket.pause();
+        if (typeof connectedPzh[address].socket.pause === "function") connectedPzh[address].socket.pause();
         connectedPzh[address].socket.write(buf);
-        connectedPzh[address].socket.resume();
+        if (typeof connectedPzh[address].socket.resume()  === "function") connectedPzh[address].socket.resume();
       } else { // sending to the app
         self.sendConnectedApp(address, message);
       }
@@ -394,14 +395,14 @@ var Pzp = function () {
    */
   function handleMsg(conn, buffer) {
     try {
-      conn.pause(); // This pauses socket, cannot receive messages
+      if (typeof conn.pause === "function") conn.pause(); // This pauses socket, cannot receive messages
       session.common.readJson(self, buffer, function(obj) {
         processMsg(obj);
       });
     } catch (err) {
       logger.error(err);
     } finally {
-      conn.resume();// unlocks socket.
+      if (typeof conn.resume === "function") conn.resume();// unlocks socket.
     }
   }
   /**
