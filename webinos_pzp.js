@@ -82,21 +82,10 @@ process.argv.forEach(function (arg) {
 var fileParams = {},
   pzpModules = [
   {name: "get42", params: {num: "21"}},
-  {name: "zap-and-shake", params: {}},
   {name: "file", params: fileParams},
   {name: "geolocation", params: {connector : "geoip"}},
-  {name: "applauncher", params: {}},
-  {name: "sensors", params: {}},
   {name: "payment", params: {}},
-  {name: "tv", params: {}},
-  {name: "oauth", params: {}},
-  {name: "deviceorientation", params: {connector : "simulator"}},
-  {name: "vehicle", params: {connector : "simulator"}},
-  {name: "context", params: {}},
-  {name: "authentication", params: {}},
-  {name: "contacts", params: {}},
-  {name: "devicestatus", params: {}},
-  {name: "discovery", params: {}}
+  {name: "contacts", params: {}}
 ];
 
 fs.readFile(path.join(__dirname, "config-pzp.json"), function(err, data) {
