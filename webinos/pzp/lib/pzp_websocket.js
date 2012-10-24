@@ -435,9 +435,9 @@ var PzpWSS = function() {
     if (connectedWebApp.hasOwnProperty(address)){
       var jsonString = JSON.stringify(message);
       logger.log('send to '+ address + ' message ' + jsonString );
-      connectedWebApp[address].socket.pause();
+      if (connectedWebApp[address].socket)connectedWebApp[address].socket.pause();
       connectedWebApp[address].sendUTF(jsonString);
-      connectedWebApp[address].socket.resume();
+      if (connectedWebApp[address].socket)connectedWebApp[address].socket.resume();
     } else {
       logger.error("unknown destination " + address );
     }
