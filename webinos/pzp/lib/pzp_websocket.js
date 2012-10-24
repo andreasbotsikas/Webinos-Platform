@@ -339,7 +339,7 @@ var PzpWSS = function() {
               // A common connection handler
               var handleConnection = function(connection) {
                   logger.log("connection accepted.");
-                  pzp.connectedApp(connection);
+                  connectedApp(connection);
                   connection.addListener('message', function(IncwsMessage) {
                       var message = IncwsMessage;
                       // WebSocket-Node adds a "type", node-websocket-server does not
@@ -364,7 +364,7 @@ var PzpWSS = function() {
               WebSocketRequest.prototype.broadcastUTF = WebSocketServer.prototype.broadcastUTF;
               var miksagoConnection = require(path.join(__dirname, '../../../node_modules/websocket-server/lib/ws/connection'));
               var miksagoServer = ws.createServer();
-              miksagoServer.server = httpserver;
+              miksagoServer.server = value;
 
               miksagoServer.addListener('connection', function(connection) {
                   // Add remoteAddress property
@@ -394,7 +394,7 @@ var PzpWSS = function() {
 
               // Handle the upgrade event ourselves instead of using WebSocketServer
               var wsRequest={};
-              httpserver.on('upgrade', function(req, socket, head) {
+              value.on('upgrade', function(req, socket, head) {
                   if (typeof req.headers['sec-websocket-version'] !== 'undefined') {
                       // WebSocket hybi-08/-09/-10 connection (WebSocket-Node)
                       wsRequest = new WebSocketRequest(socket, req, wsServerConfig);
