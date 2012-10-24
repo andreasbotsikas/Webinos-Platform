@@ -51,18 +51,6 @@ KeyStore.prototype.generateKey = function(type, id, callback) {
 
 KeyStore.prototype.storeKey = function (id, value, callback) {
   var self = this;
-
-  if(self.metaData.webinosType === "Pzp" &&
-    (os.type().toLowerCase() ==="linux" &&  os.platform().toLowerCase() !== "android") ||
-    os.type().toLowerCase() === "darwin") {
-    try {
-      var keystore = require("keystore");
-      keystore.put(id, value);
-      return callback(true);
-    } catch (err) {
-      return callback(false, err);
-    }
-  } else {
     fs.writeFile(path.resolve(path.join(self.metaData.webinosRoot, "keys",id)), value, function(err) {
       if(err) {
         return callback(false, err);
@@ -70,26 +58,10 @@ KeyStore.prototype.storeKey = function (id, value, callback) {
         return callback(true);
       }
     });
-  }
 };
 
 KeyStore.prototype.fetchKey = function (id, callback) {
   var self = this, key;
-  if(self.metaData.webinosType ==="Pzp" &&
-    (os.type().toLowerCase() ==="linux" &&  os.platform().toLowerCase() !== "android") ||
-    os.type().toLowerCase() === "darwin") {
-    try {
-      var keystore = require("keystore");
-    } catch (err) {
-      return callback(false, err);
-    }
-    key = keystore.get(id);
-    if (typeof key !== "undefined") {
-      return callback(true, key );
-    } else {
-      return callback(false, "keystore fetch key failed" );
-    }
-  } else {
     try {
       var keyPath = path.resolve(path.join(self.metaData.webinosRoot, "keys", id));
       fs.readFile(keyPath, function(err, data) {
@@ -102,7 +74,6 @@ KeyStore.prototype.fetchKey = function (id, callback) {
     } catch(err){
       return callback(false, err);
     }
-  }
 };
 
 module.exports = KeyStore;
