@@ -338,7 +338,7 @@ var PzpWSS = function() {
 
               // A common connection handler
               var handleConnection = function(connection) {
-                  log.info("connection accepted.");
+                  logger.log("connection accepted.");
                   pzp.connectedApp(connection);
                   connection.addListener('message', function(IncwsMessage) {
                       var message = IncwsMessage;
@@ -355,8 +355,6 @@ var PzpWSS = function() {
                   });
               };
 
-
-              log.info("Using legacy ws protocol");
               // Hixie-76 websocket protocol (for safari mainly)
               var WebSocketRequest = require('websocket').request,
                   ws = require('websocket-server');
@@ -406,7 +404,7 @@ var PzpWSS = function() {
                           wsRequest.handleRequestAccepted(wsConnection);
                           handleConnection(wsConnection);
                       }catch(e) {
-                          log.error("WebSocket Request unsupported by WebSocket-Node: " + e.toString());
+                          logger.error("WebSocket Request unsupported by WebSocket-Node: " + e.toString());
                           return;
                       }
                   } else {
